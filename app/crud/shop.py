@@ -34,3 +34,13 @@ def update_shop_dates(db: Session, shop_id: str, shop_update: schemas.shop.ShopU
         db.refresh(db_shop)
         return db_shop
     return None
+
+def get_shop_if_exists(db: Session, society_code: str):
+    return db.query(models.shop.Shop).filter(models.shop.Shop.society_code == society_code).first()
+
+def delete_shop(db: Session, shop_id: str):
+    db.query(models.shop.Shop).filter(models.shop.Shop.id == shop_id).delete()
+    db.commit()
+    
+def get_shop_by_id(db: Session, shop_id: str):
+    return db.query(models.shop.Shop).filter(models.shop.Shop.id == shop_id).first()

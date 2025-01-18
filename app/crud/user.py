@@ -27,7 +27,6 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def update_user(db: Session, user_id: str, user_update: schemas.user.UserCreate):
-    # Fetch the user by id
     db_user = db.query(models.user.User).filter(models.user.User.id == user_id).first()
 
     if not db_user:
@@ -37,7 +36,13 @@ def update_user(db: Session, user_id: str, user_update: schemas.user.UserCreate)
     for key, value in user_update.dict(exclude_unset=True).items():
         setattr(db_user, key, value)
 
-    # Commit the changes
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def delete_user(db: Session, user_id: str):
+    db.query(models.user.User).filter(models.user.User.id == user_id).delete()
+    db.commit()
+    
+def get_user_by_id(db: Session, user_id: str):
+    return db.query(models.user.User).filter(models.user.User.id == user_id).first()

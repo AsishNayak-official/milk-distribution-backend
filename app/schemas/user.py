@@ -24,4 +24,4 @@ class UserListResponse(BaseModel):
     data: List[UserResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True

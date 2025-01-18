@@ -37,3 +37,14 @@ def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(database.ge
     return {"data": users}
 
 
+@router.delete("/delete-user/{user_id}", response_model=schemas.user.UserResponse)
+def delete_user(user_id: str, db: Session = Depends(database.get_db)):
+    # Check if user exists before deleting
+    user = crud.user.get_user_by_id(db, user_id=user_id)
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Proceed to delete the user
+    crud.user.delete_user(db=db, user_id=user_id)
+    return {"message": "User deleted successfully"}
