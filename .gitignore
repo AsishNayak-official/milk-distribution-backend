@@ -1,0 +1,66 @@
+# Python Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual Environment
+venv/
+env/
+.venv/
+.env/
+virtualenv/
+virtualenvs/
+
+# Distribution / packaging
+*.egg
+*.egg-info
+dist/
+build/
+*.tgz
+*.tar.gz
+*.whl
+
+# Python IDE files
+.vscode/
+.idea/
+
+# Pytest
+.pytest_cache/
+
+# Django Stuff (if using Django)
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Flask & FastAPI Temporary files
+instance/
+.webassets-cache
+*.db
+
+# Jupyter Notebook files (if using Jupyter)
+.ipynb_checkpoints/
+
+# Local settings
+local_settings.py
+
+# Docker-related files (optional)
+docker-compose.override.yml
+
+# .env file (environment variables)
+.env
+*.env
+
+# Coverage reports (if using coverage tools like pytest-cov)
+.coverage
+.coverage.*
+*.coveragerc
+
+# MySQL or Postgres DB files
+*.sql
+*.sqlite3
+db.sqlite3

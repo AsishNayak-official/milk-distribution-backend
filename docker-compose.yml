@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest  # Use the latest PostgreSQL image
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: myuser       # Set the username
+      POSTGRES_PASSWORD: mypassword  # Set the password
+      POSTGRES_DB: milk_distribution  # Database name
+    ports:
+      - "5432:5432"  # Map PostgreSQL port 5432 to localhost
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data using Docker volumes
+
+volumes:
+  postgres_data:  # Named volume for persisting database data
