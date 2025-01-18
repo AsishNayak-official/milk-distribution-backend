@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.shop import Shop
-from app.schemas.shop import ShopCreate
+from app.schemas.shop import ShopCreate, ShopUpdate
 
 def create_shop(db: Session, shop: ShopCreate):
     db_shop = Shop(
@@ -24,3 +24,14 @@ def create_shop(db: Session, shop: ShopCreate):
 
 def get_shop_details(db: Session):
     return db.query(Shop).first()
+
+def update_shop_dates(db: Session, shop_id: str, shop_update: ShopUpdate):
+    db_shop = db.query(Shop).filter(Shop.id == shop_id).first()
+    if db_shop:
+        db_shop.start_bill_date = shop_update.start_bill_date
+        db_shop.end_bill_date = shop_update.end_bill_date
+        db_shop.month = shop_update.month
+        db.commit()
+        db.refresh(db_shop)
+        return db_shop
+    return None

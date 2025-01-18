@@ -15,7 +15,13 @@ class ShopCreate(ShopBase):
     
 class ShopResponse(ShopBase):
     id: str
-    users: List[UserResponse]
+    # users: List[UserResponse]
+    
+class ShopUpdate(BaseModel):
+    month: str
+    start_bill_date: str  
+    end_bill_date: str    
+
 
     class Config:
         orm_mode = True
