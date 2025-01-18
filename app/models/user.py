@@ -4,7 +4,7 @@ from ..database import Base
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     shop_id = Column(String, ForeignKey("shops.id"))
     name = Column(String)
     membership_no = Column(Integer)

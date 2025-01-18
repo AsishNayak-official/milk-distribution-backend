@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app import models,schemas
 
 def create_shop(db: Session, shop: schemas.shop.ShopCreate):
-    db_shop = Shop(
+    db_shop = models.shop.Shop(
         society_name=shop.society_name,
         society_code=shop.society_code,
         unit=shop.unit,
@@ -22,7 +22,7 @@ def create_shop(db: Session, shop: schemas.shop.ShopCreate):
 
 
 def get_shop_details(db: Session):
-    return db.query(Shop).first()
+    return db.query(models.shop.Shop).first()
 
 def update_shop_dates(db: Session, shop_id: str, shop_update: schemas.shop.ShopUpdate):
     db_shop = db.query(models.shop.Shop).filter(models.shop.Shop.id == shop_id).first()

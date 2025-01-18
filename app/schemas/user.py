@@ -3,7 +3,7 @@ from typing import List
 
 class UserBase(BaseModel):
     name: str
-    membership_no: str
+    membership_no: int
     milk_supplied: float
     total_qty_milk_supplied: float
     fat_percentage: float
@@ -18,7 +18,7 @@ class UserCreate(UserBase):
     pass
 
 class UserResponse(UserBase):
-    id: int
+    id: str
 
 class UserListResponse(BaseModel):
     data: List[UserResponse]
