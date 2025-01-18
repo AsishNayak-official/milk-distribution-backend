@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class UserBase(BaseModel):
     name: str
@@ -19,5 +20,8 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
 
+class UserListResponse(BaseModel):
+    data: List[UserResponse]
+    
     class Config:
         orm_mode = True

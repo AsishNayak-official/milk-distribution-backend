@@ -6,8 +6,8 @@ services:
     container_name: postgres_container
     restart: always
     environment:
-      POSTGRES_USER: myuser       # Set the username
-      POSTGRES_PASSWORD: mypassword  # Set the password
+      POSTGRES_USER: ${DB_USER}       # Set the username
+      POSTGRES_PASSWORD: ${DB_PASSWORD}  # Set the password
       POSTGRES_DB: milk_distribution  # Database name
     ports:
       - "5432:5432"  # Map PostgreSQL port 5432 to localhost

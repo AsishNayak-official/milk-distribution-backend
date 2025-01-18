@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from .. import models, schemas
 
-def create_user(db: Session, user: schemas.UserCreate, shop_id: int):
-    db_user = models.User(
+def create_user(db: Session, user: schemas.user.UserCreate, shop_id: int):
+    db_user = models.user.User(
         shop_id=shop_id,
         name=user.name,
         membership_no=user.membership_no,
@@ -22,12 +22,12 @@ def create_user(db: Session, user: schemas.UserCreate, shop_id: int):
     return db_user
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+    return db.query(models.user.User).offset(skip).limit(limit).all()
 
 
-def update_user(db: Session, user_id: int, user_update: schemas.UserCreate):
+def update_user(db: Session, user_id: int, user_update: schemas.user.UserCreate):
     # Fetch the user by id
-    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user = db.query(models.user.User).filter(models.user.User.id == user_id).first()
 
     if not db_user:
         return None
