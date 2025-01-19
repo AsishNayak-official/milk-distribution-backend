@@ -16,11 +16,11 @@ def get_shop_details(db: Session = Depends(database.get_db)):
 
 
 @router.post("/create-shop/", response_model=schemas.shop.ShopResponse)
-def create_shop(shop: models.shop.ShopCreate, db: Session = Depends(database.get_db)):
+def create_shop(shop: schemas.shop.ShopCreate, db: Session = Depends(database.get_db)):
     return crud.shop.create_shop(db=db, shop=shop)
 
 @router.patch("/update-shop-dates/{shop_id}", response_model=schemas.shop.ShopResponse)
-def update_shop_dates(shop_id: str, shop_update: models.shop.ShopUpdate, db: Session = Depends(database.get_db)):
+def update_shop_dates(shop_id: str, shop_update: schemas.shop.ShopUpdate, db: Session = Depends(database.get_db)):
     updated_shop = crud.shop.update_shop_dates(db=db, shop_id=shop_id, shop_update=shop_update)
     if not updated_shop:
         raise HTTPException(status_code=400, detail="Shop not found")

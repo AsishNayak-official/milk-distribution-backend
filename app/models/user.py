@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, DateTime, text
 from sqlalchemy.orm import relationship
 from ..database import Base
+from datetime import datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -17,5 +18,6 @@ class User(Base):
     branch_name = Column(String)
     account_number = Column(String)
     ifsc_code = Column(String)
+    created_at = Column(DateTime,server_default=text('CURRENT_TIMESTAMP'))
 
     shop = relationship("Shop", back_populates="users")
