@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends
+import os
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from app import schemas,crud,models
 from app import database
 from fastapi import HTTPException
+
+from app.utils.pdf_generator import create_docx
 
 router = APIRouter()
 
@@ -37,3 +40,58 @@ def delete_user(shop_id: str, db: Session = Depends(database.get_db)):
     # Proceed to delete the user
     crud.shop.delete_shop(db=db, shop_id=shop_id)
     return {"message": "Shop deleted successfully"}
+
+@router.get("/download/{shop_id}")
+def download_doc(shop_id: str, skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    # Fetch shop details
+    shop = crud.shop.get_shop_by_id(db, shop_id=shop_id)
+    if not shop:
+        raise HTTPException(status_code=400, detail="Shop not found")
+
+    # Fetch users for the shop
+    users = crud.user.get_users(db=db, skip=skip, limit=limit)
+
+    # Prepare context for the template
+    context = {
+        "society_name": shop.society_name,
+        "society_code": shop.society_code,
+        "unit": shop.unit,
+        "month": shop.month,  
+        "start_date": shop.start_bill_date,
+        "end_date": shop.end_bill_date,
+        "members": [
+            {
+                "name": user.name,
+                "membership_no": user.membership_no,
+                "milk_supplied": user.milk_supplied,
+                "total_qty_milk_supplied": user.total_qty_milk_supplied,
+                "fat_percentage": user.fat_percentage,
+                "snf_percentage": user.snf_percentage,
+                "aadhaar": user.adhaar,
+                "bank_name": user.bank_name,
+                "branch_name": user.branch_name,
+                "account_number": user.account_number,
+                "ifsc_code": user.ifsc_code,
+            }
+            for user in users
+        ],
+    }
+
+    # Generate PDF
+    output_file = f"{shop.society_name}_{shop.start_bill_date}_{shop.end_bill_date}_report.docx"
+    create_docx(context, output_file)
+
+    # Serve PDF as a downloadable response
+    with open(output_file, "rb") as file:
+        file_bytes = file.read()
+
+    # Cleanup temporary file
+    os.remove(output_file)
+
+    return Response(
+        file_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={
+            "Content-Disposition": f"attachment; filename={shop.society_name}_{shop.start_bill_date}_{shop.end_bill_date}_report.docx"
+        },
+    )
