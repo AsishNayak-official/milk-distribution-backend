@@ -1,11 +1,12 @@
 # Python Bytecode
-__pycache__/
+app/__pycache__
 *.pyc
 *.pyo
 *.pyd
 *.pdb
 
 # Virtual Environment
+/venv
 venv/
 env/
 .venv/

@@ -78,6 +78,14 @@ def add_table_page(doc, members,data):
     run.font.name = 'Arial'
     run.font.size = Pt(10)
 
+    paragraph = doc.add_paragraph("FILL ALL THE INFORMATION IN CAPITAL LETTER")
+    paragraph.alignment = docx.enum.text.WD_PARAGRAPH_ALIGNMENT.RIGHT
+    run = paragraph.runs[0]
+    run.font.name = 'Arial'
+    run.font.size = Pt(9)
+
+    paragraph.paragraph_format.space_after = Pt(0)
+
     # Add table layout
     table = doc.add_table(rows=2, cols=12)
     table.style = 'TableGrid'
