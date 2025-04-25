@@ -14,12 +14,14 @@ router = APIRouter()
 def get_shop_details(db: Session = Depends(database.get_db)):
     shop_details = crud.shop.get_shop_details(db=db)
     if shop_details is None:
-        raise HTTPException(status_code=400, detail="Shop not found")
+        raise HTTPException(status_code=400, detail="No shop details found.")
     return shop_details
 
 
 @router.post("/create-shop/", response_model=schemas.shop.ShopResponse)
 def create_shop(shop: schemas.shop.ShopCreate, db: Session = Depends(database.get_db)):
+    if not shop.society_name or not shop.society_code:
+        raise HTTPException(status_code=400, detail="Society name and code are required.")
     return crud.shop.create_shop(db=db, shop=shop)
 
 @router.patch("/update-shop-dates/{shop_id}", response_model=schemas.shop.ShopResponse)
@@ -61,17 +63,17 @@ def download_doc(shop_id: str, skip: int = 0, limit: int = 100, db: Session = De
         "end_date": shop.end_bill_date,
         "members": [
             {
-                "name": user.name,
-                "membership_no": user.membership_no,
-                "milk_supplied": user.milk_supplied,
-                "total_qty_milk_supplied": user.total_qty_milk_supplied,
-                "fat_percentage": user.fat_percentage,
-                "snf_percentage": user.snf_percentage,
-                "aadhaar": user.adhaar,
-                "bank_name": user.bank_name,
-                "branch_name": user.branch_name,
-                "account_number": user.account_number,
-                "ifsc_code": user.ifsc_code,
+                "name": user.name or "",
+                "membership_no": user.membership_no or "",
+                "milk_supplied": user.milk_supplied or "",
+                "total_qty_milk_supplied": user.total_qty_milk_supplied or "",
+                "fat_percentage": user.fat_percentage or "",
+                "snf_percentage": user.snf_percentage or "",
+                "aadhaar": user.adhaar or "",
+                "bank_name": user.bank_name or "",
+                "branch_name": user.branch_name or "",
+                "account_number": user.account_number or "",
+                "ifsc_code": user.ifsc_code or "",
             }
             for user in users
         ],
@@ -93,5 +95,5 @@ def download_doc(shop_id: str, skip: int = 0, limit: int = 100, db: Session = De
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
             "Content-Disposition": f"attachment; filename={shop.society_name}_{shop.start_bill_date}_{shop.end_bill_date}_report.docx"
-        },
+        }, 
     )

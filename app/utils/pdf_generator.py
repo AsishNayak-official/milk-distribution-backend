@@ -78,6 +78,8 @@ def add_table_page(doc, members,data):
     run.font.name = 'Arial'
     run.font.size = Pt(10)
 
+    period.paragraph_format.space_after = Pt(0)
+
     paragraph = doc.add_paragraph("FILL ALL THE INFORMATION IN CAPITAL LETTER")
     paragraph.alignment = docx.enum.text.WD_PARAGRAPH_ALIGNMENT.RIGHT
     run = paragraph.runs[0]
@@ -123,12 +125,12 @@ def add_table_page(doc, members,data):
     table.columns[1].width = Inches(1.45)
     table.columns[2].width = Inches(0.6)
     table.columns[3].width = Inches(0.6)
-    table.columns[4].width = Inches(0.7)
+    table.columns[4].width = Inches(0.65)
     table.columns[5].width = Inches(0.55)
     table.columns[6].width = Inches(0.55)
-    table.columns[7].width = Inches(1.1)
+    table.columns[7].width = Inches(1.0)
     table.columns[8].width = Inches(1.6)
-    table.columns[9].width = Inches(1.0)
+    table.columns[9].width = Inches(1.2)
     table.columns[10].width = Inches(1.2)
     table.columns[11].width = Inches(1.1)
 
@@ -160,25 +162,25 @@ def add_table_page(doc, members,data):
     for idx, member in enumerate(members, start=1):
         row_cells = table.add_row().cells
         row_cells[0].text = str(idx)
-        row_cells[1].text = str(member.get("name", ""))
-        row_cells[2].text = str(member.get("membership_no", ""))
-        row_cells[3].text = str(member.get("milk_supplied", ""))
-        row_cells[4].text = str(member.get("total_qty_milk_supplied", ""))
-        row_cells[5].text = str(member.get("fat_percentage", ""))
-        row_cells[6].text = str(member.get("snf_percentage", ""))
-
-        row_cells[7].text = str(member.get("aadhaar", ""))
-        row_cells[8].text = str(member.get("bank_name", ""))
-        row_cells[9].text = str(member.get("branch_name", ""))
-        row_cells[10].text = str(member.get("account_number", ""))
-        row_cells[11].text = str(member.get("ifsc_code", ""))
+        row_cells[1].text = member.get("name", "") or ""
+        row_cells[2].text = str(member.get("membership_no", "")) or ""
+        row_cells[3].text = str(member.get("milk_supplied", "")) or ""
+        row_cells[4].text = str(member.get("total_qty_milk_supplied", "")) or ""
+        row_cells[5].text = str(member.get("fat_percentage", "")) or ""
+        row_cells[6].text = str(member.get("snf_percentage", "")) or ""
+        
+        row_cells[7].text = member.get("aadhaar", "") or ""
+        row_cells[8].text = member.get("bank_name", "") or ""
+        row_cells[9].text = member.get("branch_name", "") or ""
+        row_cells[10].text = member.get("account_number", "") or ""
+        row_cells[11].text = member.get("ifsc_code", "") or ""
 
         # Apply font to each cell
         for cell in row_cells:
             for paragraph in cell.paragraphs:
                 for run in paragraph.runs:
                     run.font.name = 'Arial'
-                    run.font.size = Pt(10)
+                    run.font.size = Pt(9)
 
             tc_pr = cell._element.get_or_add_tcPr()
             v_align = OxmlElement('w:vAlign')  # Create <w:vAlign> element
@@ -188,14 +190,14 @@ def add_table_page(doc, members,data):
         tr = table.rows[-1]._tr  # Access the last added row's <w:tr> element
         trPr = tr.get_or_add_trPr()  # Get or add the row properties
         trHeight = OxmlElement('w:trHeight')
-        trHeight.set(qn('w:val'), '400')  # Set row height to 400 twips (~0.28 inches)
+        trHeight.set(qn('w:val'), '300') 
         trHeight.set(qn('w:hRule'), 'exact')
         trPr.append(trHeight)
 
         row_count += 1
 
     # Add empty rows if necessary (Ensure there are exactly 16 rows)
-    rows_needed = 16 - row_count
+    rows_needed = 18 - row_count
     for _ in range(rows_needed):
         row_cells = table.add_row().cells
         for cell in row_cells:
@@ -208,7 +210,7 @@ def add_table_page(doc, members,data):
         tr = table.rows[-1]._tr
         trPr = tr.get_or_add_trPr()
         trHeight = OxmlElement('w:trHeight')
-        trHeight.set(qn('w:val'), '400')  # Set row height to 400 twips (~0.28 inches)
+        trHeight.set(qn('w:val'), '300')  # Set row height to 400 twips (~0.28 inches)
         trHeight.set(qn('w:hRule'), 'exact')
         trPr.append(trHeight)
 

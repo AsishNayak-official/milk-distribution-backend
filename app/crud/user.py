@@ -34,7 +34,7 @@ def update_user(db: Session, user_id: str, user_data: dict):
 
     # Update user attributes
     for key, value in user_data.items():
-        if value is not None:
+        if key in models.user.User.__table__.columns:
             setattr(db_user, key, value)
 
     db.commit()
